@@ -1,1 +1,9 @@
 # ddd-test
+Domain-driven design (DDD).
+
+1. Develop a Web API based on a DDD Pattern in .Net6.
+2. Develop an Angular CRUD Application to maintain the data with validation in front and backend ( use FluentValidation Syntax in Both).
+3. The Angular Application also should have an overview with a grid.
+4. The Application should be startable with a docker-compose and checkable.
+5. The Repository should have a git history.
+6. Record a video declaring your application (in english).
