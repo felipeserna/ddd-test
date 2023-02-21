@@ -30,7 +30,8 @@ export class AddEmployeeComponent implements OnInit {
     .subscribe({
       next: (employee) => {
         this.router.navigate(['employees']);
-      }
+      },
+      error: (err: Error) => console.error('Observer got an error: ' + err)
     });
 
   }

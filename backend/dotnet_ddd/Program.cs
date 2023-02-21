@@ -1,4 +1,7 @@
 using dotnet_ddd.Data;
+using dotnet_ddd.Models;
+using dotnet_ddd.Validator;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +15,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<FullStackDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FullStackConnectionString")));
+
+builder.Services.AddScoped<IValidator<Employee>, EmployeeValidator>();
 
 var app = builder.Build();
 

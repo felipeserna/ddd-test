@@ -43,7 +43,8 @@ export class EditEmployeeComponent implements OnInit {
     .subscribe({
       next: (response) => {
         this.router.navigate(['employees']);
-      }
+      },
+      error: (err: Error) => console.error('Observer got an error: ' + err)
     });
   }
 

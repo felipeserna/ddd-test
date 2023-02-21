@@ -12,27 +12,94 @@
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
             <input type="text" class="form-control" id="name"
-            name="name" [(ngModel)]="employeeDetails.name">
+            name="name" [(ngModel)]="employeeDetails.name" required minlength="4" maxlength="30" pattern="[a-zA-Z ]*" #name="ngModel">
+
+            <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert">
+
+                <div *ngIf="name.errors?.['required']">
+                    Name is required.
+                </div>
+                <div *ngIf="name.errors?.['minlength']">
+                    Name must be at least 4 characters long.
+                </div>
+                <div *ngIf="name.errors?.['maxlength']">
+                    Name cannot be more than 30 characters.
+                </div>
+                <div *ngIf="name.errors?.['pattern']">
+                    Only a-z A-Z characters.
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" id="email"
-            name="email" [(ngModel)]="employeeDetails.email">
+            name="email" [(ngModel)]="employeeDetails.email" #email="ngModel" required pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+
+            <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert">
+
+                <div *ngIf="email.errors?.['required']">
+                    Email is required.
+                </div>                
+                <div *ngIf="email.errors?.['pattern']">
+                    Invalid email.
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="phone" class="form-label">Phone</label>
             <input type="number" class="form-control" id="phone"
-            name="phone" [(ngModel)]="employeeDetails.phone">
+            name="phone" [(ngModel)]="employeeDetails.phone" #phone="ngModel" required pattern="^\d{7}$">
+
+            <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert">
+
+                <div *ngIf="phone.errors?.['required']">
+                    Phone is required.
+                </div>                
+                <div *ngIf="phone.errors?.['pattern']">
+                    Phone must have 7 digits.
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="salary" class="form-label">Salary</label>
             <input type="number" class="form-control" id="salary"
-            name="salary" [(ngModel)]="employeeDetails.salary">
+            name="salary" [(ngModel)]="employeeDetails.salary" #salary="ngModel" required pattern="[1-9]\d{4}">
+
+            <div *ngIf="salary.invalid && (salary.dirty || salary.touched)" class="alert">
+
+                <div *ngIf="salary.errors?.['required']">
+                    Salary is required.
+                </div>                
+                <div *ngIf="salary.errors?.['pattern']">
+                    Salary must be greater than $10000.
+                </div>
+
+            </div>
         </div>
         <div class="mb-3">
             <label for="department" class="form-label">Department</label>
             <input type="text" class="form-control" id="department"
-            name="department" [(ngModel)]="employeeDetails.department">
+            name="department" [(ngModel)]="employeeDetails.department" required minlength="4" maxlength="30" pattern="[a-zA-Z ]*" #department="ngModel">
+
+            <div *ngIf="department.invalid && (department.dirty || department.touched)" class="alert">
+
+                <div *ngIf="department.errors?.['required']">
+                    Department is required.
+                </div>
+                <div *ngIf="department.errors?.['minlength']">
+                    Department must be at least 4 characters long.
+                </div>
+                <div *ngIf="name.errors?.['maxlength']">
+                    Department cannot be more than 30 characters.
+                </div>
+                <div *ngIf="department.errors?.['pattern']">
+                    Only a-z A-Z characters.
+                </div>
+
+            </div>
         </div>
             <button type="submit" class="btn btn-primary mr-5">Save</button>
             <button type="button" class="btn btn-danger" (click)="deleteEmployee(employeeDetails.id)">Delete</button>          

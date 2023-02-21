@@ -1,5 +1,6 @@
 ﻿using dotnet_ddd.Data;
 using dotnet_ddd.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,10 +11,12 @@ namespace dotnet_ddd.Controllers
     public class EmployeesController : Controller
     {
         private readonly FullStackDbContext _fullStackDbContext;
+        private readonly IValidator<Employee> _validator;
         
-        public EmployeesController(FullStackDbContext fullStackDbContext)
+        public EmployeesController(FullStackDbContext fullStackDbContext, IValidator<Employee> validator)
         {
             _fullStackDbContext= fullStackDbContext;
+            _validator= validator;
         }
 
         [HttpGet]
@@ -27,6 +30,13 @@ namespace dotnet_ddd.Controllers
         [HttpPost]
         public async Task<IActionResult> AddEmployee([FromBody] Employee employeeRequest)
         {
+            var validationResult = await _validator.ValidateAsync(employeeRequest);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
+
             employeeRequest.Id = Guid.NewGuid();
             await _fullStackDbContext.Employees.AddAsync(employeeRequest);
             await _fullStackDbContext.SaveChangesAsync();
@@ -59,6 +69,12 @@ namespace dotnet_ddd.Controllers
                 return NotFound();
             }
 
+            var validationResult = await _validator.ValidateAsync(updateEmployeeRequest);
+
+            if (!validationResult.IsValid)
+            {
+                throw new ValidationException(validationResult.Errors);
+            }
             employee.Name = updateEmployeeRequest.Name;
             employee.Email = updateEmployeeRequest.Email;
             employee.Phone = updateEmployeeRequest.Phone;
