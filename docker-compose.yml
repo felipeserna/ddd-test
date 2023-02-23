@@ -3,21 +3,33 @@ services:
   api:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./backend/dotnet_ddd/Dockerfile
+    image: ddd.api
+    container_name: ddd.api
     ports:
-      - "5000:80"
+      - "5200:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - "ASPNETCORE_URLS=http://+"
+    restart: on-failure
     depends_on:
       - db
   client:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./frontend/angular_ddd/Dockerfile
+    image: ddd.client
+    container_name: ddd.client
     ports:
-      - "4200:4200"
+      - "4200:80"
+    restart: on-failure
+    depends_on:
+      - api
   db:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
+    container_name: ddd.db
     environment:
-      SA_PASSWORD: "<YourStrong@Passw0rd>"
+      SA_PASSWORD: "P@ssW0rd!"
       ACCEPT_EULA: "Y"
     ports:
-      - "1433:1433"
+      - 1434:1433 # exposed just for debugging purposes
