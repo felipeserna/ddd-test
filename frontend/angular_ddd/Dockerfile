@@ -1,21 +1,33 @@
-FROM node:18.14.2-alpine3.17
-#carbon
- 
+# syntax=docker/dockerfile:1.4
+
+FROM --platform=$BUILDPLATFORM node:18.10.0-bullseye-slim as builder
+
+RUN mkdir /usr/src/app
 WORKDIR /usr/src/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY ./frontend/angular_ddd/package*.json ./
- 
-# Install any needed packages
-RUN npm i
- 
-# Bundle app source
-COPY ./frontend/angular_ddd/ .
+RUN npm install -g @angular/cli@15
+
+COPY ./package*.json ./
+RUN npm ci
+
+COPY . .
 RUN ls
 RUN ls /usr/src/app
+CMD ["ng", "serve", "--host", "0.0.0.0"]
 
-EXPOSE 4200
- 
-CMD [ "npm", "start" ]
+FROM builder as dev-envs
+
+RUN <<EOF
+apt-get update
+apt-get install -y --no-install-recommends git
+EOF
+
+RUN <<EOF
+useradd -s /bin/bash -m vscode
+groupadd docker
+usermod -aG docker vscode
+EOF
+# install Docker tools (cli, buildx, compose)
+COPY --from=gloursdocker/docker / /
+RUN ls
+CMD ["ng", "serve", "--host", "0.0.0.0"]
