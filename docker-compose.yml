@@ -23,6 +23,8 @@ services:
     volumes:
       - ./angular:/project
       - /project/node_modules
+    depends_on:
+      - api
   db:
     image: mcr.microsoft.com/mssql/server:2019-CU3-ubuntu-18.04
     container_name: ddd.db
