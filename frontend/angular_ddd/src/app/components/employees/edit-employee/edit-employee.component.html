@@ -66,14 +66,14 @@
         <div class="mb-3">
             <label for="salary" class="form-label">USD Salary</label>
             <input type="number" class="form-control" id="salary"
-            name="salary" [(ngModel)]="employeeDetails.salary" #salary="ngModel" required pattern="[1-9]\d{4}">
+            name="salary" [(ngModel)]="employeeDetails.salary" #salary="ngModel" required min="10001">
 
             <div *ngIf="salary.invalid && (salary.dirty || salary.touched)" class="alert">
 
                 <div *ngIf="salary.errors?.['required']">
                     Salary is required.
                 </div>                
-                <div *ngIf="salary.errors?.['pattern']">
+                <div *ngIf="salary.errors?.['min']">
                     Salary must be greater than $10000.
                 </div>
 
